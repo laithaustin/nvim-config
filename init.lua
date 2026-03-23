@@ -21,6 +21,19 @@ require("lazy").setup({
     branch = "v2.5",
     import = "nvchad.plugins",
   },
+  {
+    "supermaven-inc/supermaven-nvim",
+    event = "InsertEnter",
+    opts = {
+      keymaps = {
+        accept_suggestion = "<Tab>",
+        clear_suggestion = "<C-]>",
+        accept_word = "<C-j>",
+      },
+      disable_inline_completion = false,
+      disable_keymaps = false,
+    },
+  },
 
   { import = "plugins" },
 }, lazy_config)
@@ -35,3 +48,12 @@ require "autocmds"
 vim.schedule(function()
   require "mappings"
 end)
+
+-- Autocmd to save the current buffer when leaving insert mode
+vim.api.nvim_create_autocmd("InsertLeave", {
+  group = vim.api.nvim_create_augroup("autosave_insert_leave", { clear = true }),
+  callback = function()
+    vim.cmd("silent! write")
+  end,
+})
+
